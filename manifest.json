@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2, 
+	"name": "URL Checker", 
+	"version": "0.0.0", 
+	"description": "Finds all of the links on the current page and sorts them by relative or absolute URL.",
+	"browser_action": {
+		"default_icon": "myAvatar.png", 
+		"default_popup": "popup.html"
+	},
+	"author": "Jeff Everhart", 
+	"content_scripts": [
+	{
+		"matches": ["<all_urls>"], 
+		"js":["contentscript.js"]
+	}
+	]
+}
