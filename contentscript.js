@@ -1,9 +1,46 @@
+
+
 var linksObject = {
 	"relativeLinks": [], 
 	"absoluteLinks": [], 
-	"hashLinks": []
+	"hashLinks": [], 
+	"otherEnvLinks": []
 }
 
+var hostname = location.hostname; 
+console.log(hostname); 
+
+var vfbEnvURLS = [
+
+	"www.vafb.com", 
+	"fbatstevoq.vafb.com", 
+	"vfbevoqfbatst.personifycloud.com"
+];
+
+function filterEnvURLs (linkToTest){
+ 
+	var isOtherEnv = false; 
+
+	for (var i = 0; i < vfbEnvURLS.length; i++){
+		if (linkToTest.includes(vfbEnvURLS[i]))
+		{
+			if ( !linkToTest.includes(hostname) ){
+				isOtherEnv = true; 
+			}
+		}
+	}
+
+	return isOtherEnv; 
+}
+
+function inspectOtherURLs(){
+	console.log("inspectRelURLs"); 
+
+	for (var i = 0; i < linksObject.otherEnvLinks.length; i++){
+
+			linksObject.otherEnvLinks[i].style = "background-color: red;"
+	}
+}
 
 function inspectRelURLs(){
 	console.log("inspectRelURLs"); 
@@ -19,7 +56,7 @@ function inspectAbsURLs(){
 
 	for (var i = 0; i < linksObject.absoluteLinks.length; i++){
 
-			linksObject.absoluteLinks[i].style = "background-color: red;"
+			linksObject.absoluteLinks[i].style = "background-color: yellow;"
 	}
 }
 
@@ -39,6 +76,9 @@ function getAllAnchors(){
 	linksObject.relativeLinks = []; 
 	linksObject.absoluteLinks = []; 
 	linksObject.hashLinks = []; 
+	linksObject.otherEnvLinks = []; 
+
+	var onClickElems = document.querySelectorAll('[onclick]');
 
 	var links = document.querySelectorAll('a');
 
@@ -48,7 +88,10 @@ function getAllAnchors(){
 		if (linkToTest.attributes['href'] !== undefined){ 
 			linkToTestHref = linkToTest.attributes['href'].nodeValue;
 
-			if ( linkToTestHref.includes('//') ){
+			//test if is mismatched environment
+			if (filterEnvURLs(linkToTestHref)){
+				linksObject.otherEnvLinks.push(linkToTest); 
+			} else if ( linkToTestHref.includes('//') ){
 				linksObject.absoluteLinks.push(linkToTest); 
 			} else if (linkToTestHref.includes('#')){
 				linksObject.hashLinks.push(linkToTest);
@@ -58,7 +101,30 @@ function getAllAnchors(){
 
 		}
 	}
+
+
+	for (var i = 0; i < onClickElems.length; i++){
+		var clickElemToTest = onClickElems[i]; 
+		if (clickElemToTest.attributes['onclick'] !== undefined){
+
+			onClickValue = clickElemToTest.attributes['onclick'].nodeValue;
+			
+			if (onClickValue.includes('location.href') && filterEnvURLs(onClickValue)){
+				linksObject.otherEnvLinks.push(clickElemToTest); 
+			} else if (onClickValue.includes('location.href') && onClickValue.includes('//')){
+				linksObject.absoluteLinks.push(clickElemToTest); 
+			} else if (onClickValue.includes('location.href') && onClickValue.includes('#')){
+				linksObject.hashLinks.push(clickElemToTest);
+			} else if (onClickValue.includes('location.href')) {
+				linksObject.relativeLinks.push(clickElemToTest);
+			}
+		}
+	}
 	console.log(linksObject);
+
+	inspectOtherURLs(); 
+	//maybe transform link objects into a 
+	//an object that I can send 
 	return linksObject;
 }
 
