@@ -8,3 +8,6 @@ After the tool has collected and sorted the links on the page, you can inspect t
 
 ## Ideas for Future Development 
 + Add a feature to pull out all links inside of a NAV element into a separate bucket 
+
+### Update 01/25/2017
+Added addtional functionality to check for mixed case URLs on the page for SEO reasons. All URLs with a capital letter will be painted in orange. 
