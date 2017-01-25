@@ -98,6 +98,7 @@ var popupLinksObject;
 		    document.querySelector('.absURL').innerHTML = response.absoluteLinks.length; 
 		    document.querySelector('.hashURL').innerHTML = response.hashLinks.length; 
 		    document.querySelector('.otherURL').innerHTML = response.otherEnvLinks.length;
+		    document.querySelector('.uppercaseURL').innerHTML = response.uppercaseLinks.length; 
 		  
 		  });
 		});
