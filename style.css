@@ -34,6 +34,14 @@
 	border-radius: 4px;
 }
 
+.anchor-inspector-alert {
+	background-color: red;
+}
+
+.anchor-inspector-warn {
+	background-color: orange;
+}
+
 #link-details {
 	display: none;
 }
