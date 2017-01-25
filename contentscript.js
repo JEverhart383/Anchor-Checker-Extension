@@ -4,7 +4,8 @@ var linksObject = {
 	"relativeLinks": [], 
 	"absoluteLinks": [], 
 	"hashLinks": [], 
-	"otherEnvLinks": []
+	"otherEnvLinks": [], 
+	"uppercaseLinks" : []
 }
 
 var hostname = location.hostname; 
@@ -31,6 +32,13 @@ function filterEnvURLs (linkToTest){
 	}
 
 	return isOtherEnv; 
+}
+
+function inspectUppercaseURLs(){
+	for (var i = 0; i < linksObject.uppercaseLinks.length; i++){
+
+			linksObject.uppercaseLinks[i].style = "background-color: orange;"
+	}
 }
 
 function inspectOtherURLs(){
@@ -76,7 +84,8 @@ function getAllAnchors(){
 	linksObject.relativeLinks = []; 
 	linksObject.absoluteLinks = []; 
 	linksObject.hashLinks = []; 
-	linksObject.otherEnvLinks = []; 
+	linksObject.otherEnvLinks = [];
+	linksObject.uppercaseLinks = [];  
 
 	var onClickElems = document.querySelectorAll('[onclick]');
 
@@ -87,6 +96,16 @@ function getAllAnchors(){
 		var linkToTest = links[i];
 		if (linkToTest.attributes['href'] !== undefined){ 
 			linkToTestHref = linkToTest.attributes['href'].nodeValue;
+
+			
+
+			//test if uppercase 
+
+			var regExp = /[A-Z]/; 
+			if (linkToTestHref.match(regExp)){
+				console.log(linkToTestHref); 
+				linksObject.uppercaseLinks.push(linkToTest); 
+			}
 
 			//test if is mismatched environment
 			if (filterEnvURLs(linkToTestHref)){
@@ -123,6 +142,7 @@ function getAllAnchors(){
 	console.log(linksObject);
 
 	inspectOtherURLs(); 
+	inspectUppercaseURLs(); 
 	//maybe transform link objects into a 
 	//an object that I can send 
 	return linksObject;
